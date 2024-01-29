@@ -1,0 +1,29 @@
+    # 상품 정보 중 가격이 3000원 이상인 상품은 10% 할인해준다.
+    discount = 10
+    limit_price = 3000
+    find_by_price_query = "select id, price from tbl_product where price >= %s"
+    find_by_price_params = [limit_price]
+    products = find_by_id(find_by_price_query, find_by_price_params)
+    # print(products)
+
+    update_query = "update tbl_product \
+                        set price = %s \
+                        where id = %s"
+
+    for product in products:
+        product_price = int(product.get('price') * (discount * 0.01))
+        product_id = str(product.get('id'))
+        update_params = [product_price, product_id]
+        # print(update_params)
+        # update(update_query, update_params)
+
+    # 평균 가격보다 높은 상품은 모두 삭제한다.
+    find_avg_query = "select round(avg(price)) average from tbl_product"
+    print(find_all(find_avg_query)[0].get('average'))
+    print(find_all(find_avg_query))
+
+    average = f"{find_all(find_avg_query)[0].get('average')}"
+    delete_params = [average]
+    # print(delete_params)
+    delete_query = "delete from tbl_product where price > %s"
+    # delete(delete_query, delete_params)
